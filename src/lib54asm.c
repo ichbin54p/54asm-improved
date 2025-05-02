@@ -58,17 +58,20 @@ int lib54asm_init_isa(lib54asm_isa_t* isa, uint8_t size){
 }
 
 int lib54asm_init_mem8(lib54asm_mem8_t* memory, size_t ram, size_t ports){
+    memory->ram = NULL;
+    memory->port = NULL;
+
     if (ram < 1 || ports < 1){
         return LIB54ASM_ERROR_INIT_MEM_SIZE;
     }
 
     memory->ram = malloc(ram);
-    memory->port = fopen("cpu.ports", "r+");
+    memory->port = fopen("cpu.ports", "w+");
     memory->port_count = ports;
 
     memset(memory->ram, 0, ram);
 
-    if (memory->ram == NULL || memory->port == NULL){
+    if (memory->ram == NULL){
         return LIB54ASM_ERROR_INIT_MEM_NULL;
     }
 

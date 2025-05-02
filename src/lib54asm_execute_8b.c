@@ -45,6 +45,8 @@ int lib54asm_execute_8b_1op(FILE* log, FILE* ifd, int speed, size_t program, int
 
     if (status != 0){
         lib54asm_error_print(status, log);
+        lib54asm_cleanup_isa(&cpu.isa);
+        lib54asm_cleanup_mem8(&cpu.mem);
 
         return 1;
     }
@@ -65,6 +67,8 @@ int lib54asm_execute_8b_1op(FILE* log, FILE* ifd, int speed, size_t program, int
         if (status < 0){
             lib54asm_error_print(status, stdout);
             fprintf(log, "error adding opcode %d\n", i);
+
+            lib54asm_cleanup_cpu8_1op(&cpu);
     
             return 1;
         }

@@ -80,14 +80,14 @@ void NOOP(lib54asm_instruction8_arg_t* args){
 }
 
 void STR(lib54asm_instruction8_arg_t* args){
-    fprintf(args->cpu->ofd, "exec: LOD: loading reg0(%d) to ram addr %d(%d)\n", args->cpu->reg[0], args->op2, args->cpu->mem.ram[args->op2 + 1]);
+    fprintf(args->cpu->ofd, "exec: STR: loading reg0(%d) to ram addr %d(%d)\n", args->cpu->reg[0], args->op2, args->cpu->mem.ram[args->op2]);
 
-    args->cpu->mem.ram[args->op2 + 1] = args->cpu->reg[0];
+    args->cpu->mem.ram[args->op2] = args->cpu->reg[0];
     *args->i += 1;
 }
 
 void LOD(lib54asm_instruction8_arg_t* args){
-    fprintf(args->cpu->ofd, "exec: STR: loading ram addr %d(%d) to reg0(%d)\n", args->op2, args->cpu->mem.ram[args->op2], args->cpu->reg[0]);
+    fprintf(args->cpu->ofd, "exec: LOD: loading ram addr %d(%d) to reg0(%d)\n", args->op2, args->cpu->mem.ram[args->op2], args->cpu->reg[0]);
 
     args->cpu->reg[0] = args->cpu->mem.ram[args->op2];
     *args->i += 1;

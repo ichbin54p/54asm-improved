@@ -2,146 +2,94 @@
 
 54asm is a programming language designed to run on minecraft computers, spefically CPU's with 1 operand.
 
-# Table of contents
+This is lib54asm's github page, the documentation here is intended for the usage of lib54asm, to learn how to use 54asm as a programming language, visit <placeholder>
 
-* [Usage](#usage)
-    * [Compiling](#compiling)
-    * [Syntax](#syntax)
-    * [ISA](#isa)
-        * [Default ISA](#default-isa)
-        * [Custom ISA's](#custom-flags)
-    * [Flags](#flags)
-        * [Default Flags](#default-flags)
-        * [Custom Flags](#custom-flags)
+# Compiling from source
 
-# Usage
-
-## Compiling
-
-To compile 54asm from source, make sure you have `make` installed then run
-
-```sh
-sudo make
-```
-
-or
+To compile 54asm from source, make sure you have make installed and then run
 
 ```sh
 sudo make install
-sudo make clean
 ```
 
-But, if you want to compile 54asm code, make sure you have `54asm-compile` and `54asm-execute` in your PATH and then run
+If you ever need to uninstall 54asm, just run
 
 ```sh
-54asm-compile <INPUT> -o <OUTPUT>
+sudo make uninstall
 ```
 
-To execute the compiled file, run
+**NOTE** for updating, I would recommend uninstalling and then installing again otherwise, some files might not get updated
+
+# Tools
+
+54asm comes with tools which were developed for CLI usage. There are several tools included in 54asm but the most important ones are `54asm-compile` and `54asm-execute`
+
+The other tools which aren't as important should also be installed, they include
+
+- `54asm-gpu`
+- `54asm-display-input`
+- `54asm-cpu-port-input`
+
+The usage of these tools can be found later in the documentation
+
+## compile
+
+To compile your 54asm files, you can use `54asm-compile`, if you just run the file without any arguements, it will print a usage help text
+
+Usage help:
+
+```
+Usage: 54asm-compile [input | path] [arguements]
+
+-o, --output [STR | PATH]
+```
+
+Arguements in more detail:
+
+- `-o`, `--output` **required**, output file of the compiled 54asm code
+
+Example usage:
 
 ```sh
-54asm-execute <INPUT> -log <LOG_FILE> -speed <EXECUTE-SPEED-IN-NANOSECONDS> -size <PROGRAM-SIZE>
+54asm-execute main.build -log log.log -size 128 -speed 100000
 ```
 
-## Syntax
+## execute
 
-54asm's syntax is very simple, for every line you have an opcode and then operands. The examples in this tutorial will all have 1 operand (*1 operand in the sense that it is compatable for 1 operand minecraft CPU's, for example: the LDI instruction has 2 operands but the first operand is unused and the second operand is technically another instruction*)
+When you've compiled a 54asm file you can execute it with the `54asm-execute` tool. The `54asm-execute` tool is basically like an emulator with virtual memory.
 
-An example of the syntax would be
-
-```py
-RST 0
-```
-
-This program will store the value of ACC into register 0, depending on your ISA.
-
-Another example here is loading immediate
-
-```py
-LDI 0 54
-RST 0
-```
-
-This will load an immediate of the value 54 and store it in register 0. The first operand has no use currently.
-
-## ISA
-
-In this tutorial, we will use the default ISA. Custom ISA's can be defined and used, it will be covered later.
-
-### Default ISA
-
-#### LDI `LDI <op1> <op2>`
-
-Loads an immediate of value `<op2>` into ACC
-
-#### RST `RST <op1>`
-
-Stores the value of ACC into reg `<op1>`
-
-#### ADD `ADD <op1>`
-
-Adds reg `<op1>` with ACC and replaces current ACC value with the sum
-
-#### SUB `SUB <op1>`
-
-Subtracts the value of ACC from reg `<op1>` and replaces current ACC value with the sum
-
-#### LOD `LOD <op1> <op2>`
-
-Stores value from ram address `<op2>` into ACC
-
-#### STR `STR <op1> <op2>`
-
-Loads ACC value into ram address `<op2>`
-
-#### BRC `BRC <op1> <op2>`
-
-Branches to instruction `<op2>` if flag `<op1>` is true. See placeholder_flags
-
-#### PLD `PLD <op1>`
-
-Loads value from port `<op1>` into ACC
-
-#### PST `PST <op1>`
-
-Stores value from port `<op1>` into ACC
-
-#### XOR `XOR <op1>`
-
-XOR's ACC and the value of reg `<op1>` and replaces current ACC value with the sum
-
-#### XNOR `XOR <op1>`
-
-XNOR's ACC and the value of reg `<op1>` and replaces current ACC value with the sum
-
-#### INC `INC <op1>`
-
-Increments ACC
-
-#### DEC `DEC <op1>`
-
-Decrements ACC
-
-### Custom ISA's
-
-To create custom ISA's, you will have to modify the source code of lib54asm, specifically `isa.h`.
-
-## Flags
-
-### Default flags
-
-Here's a table of the default flags
+Usage help:
 
 ```
-index  name  description
+Usage: 54asm-execute [STR | PATH] [arguements]
 
-  0    NULL  always on
-  1    ZERO  only on if ZERO
-  2    COUT  only on if COUT
+-log [STR | PATH]
+-speed [INT]
+-size [INT]
+-debug [1 | 0]
+-debug-file [STR | PATH]
 ```
 
-The reason of the NULL flag is to replace the JMP instruction
+Arguements in more detail:
 
-### Custom flags
+- `-log` log file path, will overwrite existing file. Default `stdout`
+- `-speed` the CPU's instruction speed in nanoseconds
+- `-size` the size of the program, the max amount of instructions for a *compiled* program
+- `-debug` a bool (1 | 0), print debug information
+- `-debug-file` debug file path, will overwrite existing file. Default `stdout`
 
-The feature of adding custom flags is not officially supported
+Example usage:
+
+```sh
+54asm-execute main.build -log log.log -size 128 -speed 100000
+```
+
+## less important tools
+
+Will document this later
+
+# Using lib54asm
+
+Lib54asm is the 54asm library, it can be imported into your C projects. The 54asm-tools are actually based off lib54asm so, lib54asm would be their dependency.
+
+The full documentation of lib54asm will be written later... For now you can use the tools source code as reference.
